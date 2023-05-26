@@ -1,0 +1,792 @@
+// If you want to override variables do it here
+@import "variables";
+
+//font sizes
+@import "fontsize";
+
+// If you want to add something do it here
+@import "custom";
+// ie fixes
+@import "ie-fix";
+
+$body-font-family: iransans;
+//default container
+@import "vendors/defaultContainer/sidebar";
+@import "vendors/defaultContainer/dropdown";
+@import "vendors/defaultContainer/footer";
+@import "vendors/defaultContainer/defaultContainer";
+
+$primary: #00a7b7;
+$secondary: #7d8ec4;
+$cancel: #f3677f;
+
+@import "input";
+@import "btn";
+
+.btn-primary {
+  background-color: $primary !important;
+  border-color: $primary !important;
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: lighten($primary, 5%) !important;
+  }
+}
+// project font family
+*,
+body {
+  font-family: projectMainFont;
+}
+@font-face {
+  font-family: projectMainFont;
+  src: url("assets/fonts/IRANSans\(FaNum\).ttf");
+}
+
+//toastification style
+.Vue-Toastification__toast-body {
+  direction: rtl !important;
+  text-align: right !important;
+}
+table {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+}
+.break-avoid {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  -webkit-column-break-inside: avoid;
+}
+@media print {
+  table {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
+  .break-avoid {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    -webkit-column-break-inside: avoid;
+  }
+  td,
+  th {
+    font-size: 80%;
+  }
+}
+
+//table common styles
+.table-striped tbody tr:nth-of-type(2n + 1) {
+  background-color: $sidebar !important;
+}
+.table-striped tbody tr:nth-of-type(2n) {
+  background-color: $boxshadow;
+}
+
+td,
+th {
+  color: $active;
+  font-weight: bold;
+  line-height: 45px !important;
+}
+
+th {
+  font-size: 16px !important;
+}
+tr {
+  font-size: 15px !important;
+}
+
+.table thead {
+  background-color: $activeTab !important;
+  border-radius: 5px !important;
+}
+
+.table th,
+.table td {
+  border-top: none !important;
+  padding: 15px !important;
+}
+
+.table thead th {
+  border-bottom: none !important;
+  border-spacing: 10px !important;
+}
+
+td .v-btn:not(.v-btn--round).v-size--default {
+  height: auto !important;
+}
+
+//headings font sizes
+
+h1 {
+  font-size: 28px !important;
+}
+h2 {
+  font-size: 26px !important;
+}
+h3 {
+  font-size: 24px !important;
+}
+h4 {
+  font-size: 22px !important;
+}
+h5 {
+  font-size: 19px !important;
+}
+h6 {
+  font-size: 16px !important;
+}
+
+.v-card__title {
+  background-color: $sidebar !important;
+  color: $active !important;
+}
+
+//refresh btn styles
+
+.refresh-btn {
+  min-width: 0px !important;
+  color: $element !important;
+}
+.refresh-btn:before {
+  background-color: transparent !important;
+}
+.refresh-btn:hover {
+  background-color: transparent !important;
+  color: $active !important;
+  transform: translateY(-2px);
+  transition: transform 0.2s;
+  font-size: 16px !important;
+}
+.refresh-btn:hover:before,
+.refresh-btn:focus:before {
+  background-color: transparent !important;
+}
+
+.barChart2-refresh {
+  position: absolute !important;
+  right: 0 !important;
+}
+
+//commom btn styles
+.v-btn {
+  box-shadow: none !important;
+}
+
+.primary-btn.v-btn {
+  background-color: $element !important;
+  color: $sidebar !important;
+  border-radius: 10px !important;
+  font-size: 16px !important;
+}
+
+.primary-btn:hover,
+.v-btn:hover {
+  background-color: $activeTab !important;
+  transform: translateY(-2px);
+  transition: transform 0.2s;
+  color: $element !important;
+}
+.red-btn.v-btn {
+  color: $sidebar !important;
+  border-radius: 10px !important;
+  font-size: 16px !important;
+}
+.red-btn:hover,
+.v-btn:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s;
+  color: $element !important;
+}
+.primary-btn span,
+.secondary-btn span,
+.services-btn span {
+  font-size: 16px !important;
+}
+.secondary-btn {
+  background-color: $sidebar !important;
+  color: $element !important;
+  border: 1px solid $element !important;
+  border-radius: 10px !important;
+  font-size: 16px !important;
+}
+
+.secondary-btn:hover {
+  background-color: $sidebar !important;
+  border: none !important;
+  color: $element !important;
+  transform: translateY(-2px);
+  transition: transform 0.2s;
+}
+
+.shift-btn {
+  background-color: $activeTab !important;
+  color: $element !important;
+  border-radius: 10px !important;
+  font-size: 14px !important;
+  // width: 100% !important;
+}
+.submit-btn {
+  border-radius: 10px !important;
+  width: 10% !important;
+  padding: 2.2rem !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+}
+
+.red-btn {
+  background-color: $redcolor !important;
+  color: $sidebar !important;
+  border-radius: 10px !important;
+  font-size: 16px !important;
+}
+
+.red-btn:hover {
+  background-color: $sidebar !important;
+  color: $redcolor !important;
+  transform: translateY(-2px);
+  transition: transform 0.2s;
+  font-size: 16px !important;
+}
+
+.btn-col {
+  padding-left: 0 !important;
+}
+
+.v-pagination__item,
+.v-pagination__navigation {
+  border-radius: 10px !important;
+  box-shadow: 0px 0px 5px $boxshadow !important;
+}
+
+.common-text,
+p {
+  font-size: 16px !important;
+  line-height: 3rem;
+}
+
+//tab-item styles
+.v-tabs {
+  background-color: transparent !important;
+}
+.v-tab {
+  max-width: 100% !important;
+  border-top-left-radius: 25px !important;
+  border-top-right-radius: 25px !important;
+  background-color: $sidebar !important;
+  font-weight: bold !important;
+}
+.v-tab:hover {
+  border-top-left-radius: 25px !important;
+  border-top-right-radius: 25px !important;
+}
+.v-tab--active {
+  background-color: $activeTab !important;
+  border-top-left-radius: 25px !important;
+  border-top-right-radius: 25px !important;
+}
+
+.width-tab .v-tabs-slider-wrapper {
+  width: 100% !important;
+}
+
+.v-tabs:not(.v-tabs--vertical):not(.v-tabs--right)
+  > .v-slide-group--is-overflowing.v-tabs-bar--is-mobile:not(.v-slide-group--has-affixes)
+  .v-slide-group__prev {
+  display: none !important;
+}
+
+.theme--light.v-tabs .v-tab:hover {
+  background-color: $activeTab !important;
+}
+.theme--light.v-tabs .v-tab:hover::before {
+  opacity: 0 !important;
+}
+.v-card {
+  box-shadow: none !important;
+}
+
+.v-card__title h3 {
+  font-size: 26px !important;
+}
+
+.cards {
+  border-radius: 30px !important;
+}
+
+.table-wrapper {
+  width: 100% !important;
+  overflow-x: scroll !important;
+}
+
+//the card with v-tabs
+.br-card {
+  box-shadow: none !important;
+  border-bottom-right-radius: 30px !important;
+  border-bottom-left-radius: 30px !important;
+}
+
+.search-input {
+  border-radius: 10px !important;
+}
+
+.inputs-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  .v-text-field.v-text-field--enclosed .v-text-field__details {
+    display: none !important;
+  }
+
+  .filter-col {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+  }
+}
+
+.details-hidden {
+  .v-text-field.v-text-field--enclosed .v-text-field__details {
+    display: none !important;
+  }
+}
+
+.file-details-hidden {
+  .v-input__control .v-text-field__details {
+    display: none !important;
+  }
+}
+
+.time-row {
+  .v-text-field.v-text-field--enclosed .v-text-field__details {
+    display: none !important;
+  }
+}
+
+.patientName {
+  .v-input__control .v-text-field__details {
+    display: none !important;
+  }
+  .v-menu {
+    z-index: 251 !important;
+  }
+}
+
+.dr-search {
+  margin-left: 0.9rem !important;
+  margin-right: 0.9rem !important;
+}
+
+//splash page
+.splash-div {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  width: 100%;
+  height: 100% !important;
+}
+
+.splash-image {
+  width: 60rem !important;
+  height: auto !important;
+}
+
+.splash-text {
+  font-weight: bold;
+  color: $element !important;
+}
+
+.v-select-list div {
+  font-size: 16px !important;
+  text-align: right !important;
+}
+
+.v-text-field {
+  label {
+    font-size: 15px !important;
+  }
+  .v-input__control .v-input__slot {
+    border-radius: 5px !important;
+  }
+}
+
+.date-input {
+  .v-input__icon {
+    .v-icon {
+      color: $element !important;
+      font-size: 18px !important;
+    }
+    border: 1px solid $element;
+    padding: 18.8px !important;
+    border-radius: 5px !important;
+    z-index: 1 !important;
+  }
+
+  .v-input__append-inner {
+    margin-top: 0.5px !important;
+    margin-left: 0px !important;
+    height: 100% !important;
+  }
+  .v-input__slot {
+    padding-left: 0px !important;
+  }
+}
+
+.file-input {
+  .v-input__icon {
+    .v-icon {
+      color: $element !important;
+    }
+  }
+
+  fieldset {
+    border-style: dashed !important;
+  }
+}
+
+.v-file-input__text {
+  font-size: 16px !important;
+}
+
+.correct {
+  color: $primary !important;
+  border: 1px solid #dee2e6 !important;
+}
+
+.incorrect {
+  color: $redcolor !important;
+  border: 1px solid $redcolor;
+}
+
+.outPatientCheckbox .v-input__control .v-input__slot label {
+  margin-top: 8px;
+}
+
+@media (max-width: 960px) {
+  .newPatient-btn {
+    margin-top: 2.5rem !important;
+  }
+  .numVisit {
+    margin-right: 10px !important;
+    margin-top: 0 !important;
+  }
+  .patientName {
+    margin-top: 10px !important;
+  }
+}
+
+//Reception Dashboard
+
+.d-btn-row {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+
+  .d-btn {
+    font-weight: bold !important;
+    width: 100% !important;
+    font-size: 18px !important;
+  }
+  .d-btn-col {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+}
+
+.d-table {
+  width: 100% !important;
+}
+.q-btn {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  .v-icon {
+    color: $primary !important;
+    font-size: 20px !important;
+  }
+}
+
+.vpd-counter input {
+  font-size: inherit !important;
+}
+
+.card-title-row {
+  height: 100% !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  .card-icon {
+    width: 5rem !important;
+    height: 5rem !important;
+    border: 0.2rem solid $primary;
+    padding: 0.8rem !important;
+    border-radius: 15px !important;
+  }
+  .date-div {
+    display: flex !important;
+    flex-direction: column !important;
+    span {
+      font-size: 16px !important;
+    }
+    .span-1 {
+      border: 2px solid $primary !important;
+      padding: 0.8rem !important;
+      border-top-right-radius: 10px !important;
+      border-top-left-radius: 10px !important;
+      text-align: center !important;
+    }
+    .span-2 {
+      border: 2px solid $active !important;
+      padding: 0.8rem !important;
+      border-bottom-right-radius: 10px !important;
+      border-bottom-left-radius: 10px !important;
+      border-top: none !important;
+      text-align: center !important;
+    }
+  }
+}
+
+.number-card-title {
+  display: flex !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+  align-items: center !important;
+
+  .num-div {
+    width: 4.8rem !important;
+    height: 4.8rem !important;
+    border: 2px solid $primary !important;
+    padding: 0.6rem !important;
+    border-radius: 10px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    font-size: 16px;
+  }
+}
+
+.div-icon {
+  width: 5rem !important;
+  height: 5rem !important;
+}
+
+.services-btn {
+  display: flex !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  cursor: pointer;
+  background-color: $activeTab !important;
+  color: $active !important;
+  border-radius: 10px !important;
+}
+
+.services-btn:hover {
+  background-color: $activeTab !important;
+  color: $primary !important;
+  transform: scale(0.95);
+  transition: transform 0.2s;
+}
+
+.details-div span {
+  font-size: 16px !important;
+}
+
+.warn-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+//login
+.login-text {
+  color: $active !important;
+  font-weight: bold !important;
+}
+
+.login-card {
+  .v-text-field.v-text-field--enclosed .v-text-field__details {
+    display: none !important;
+  }
+  overflow: hidden;
+}
+
+.v-input__icon--append .v-icon {
+  color: $primary !important;
+  font-size: 16px !important;
+}
+.v-select__slot .v-input__icon--append .v-icon {
+  font-size: 32px !important;
+}
+
+.login-page {
+  background-image: url(/loginBG.jpg);
+  background-size: cover !important;
+  height: 100vh !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-input {
+  label {
+    font-size: 16px !important;
+  }
+}
+
+.center-row {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: column !important;
+}
+
+input,
+button,
+select,
+optgroup,
+textarea,
+.v-select__selection {
+  font-size: 14px !important;
+}
+
+.close-icon{
+  font-size: 20px !important;
+}
+
+.v-select-list .v-list-item .v-list-item__content .v-list-item__title {
+  padding: 1rem !important;
+}
+
+.v-pagination__item {
+  font-size: 16px !important;
+}
+
+.v-card__title {
+  font-size: 26px !important;
+}
+
+.tab-title {
+  font-size: 15px !important;
+  span {
+    padding: 15px 0 !important;
+  }
+}
+
+.card-h-title {
+  font-size: 16px !important;
+}
+.patient-div {
+  background-color: $background;
+  padding: 1.5rem;
+  border-radius: 10px;
+  .v-text-field--outlined fieldset {
+    border: none !important;
+  }
+}
+
+.user-list-item {
+  font-size: 16px !important;
+  justify-content: center !important;
+}
+
+.user-list-item:hover {
+  background-color: $activeTab !important;
+}
+
+.vpd-day {
+  font-size: 16px !important;
+}
+
+.vpd-addon-list-item.vpd-selected {
+  color: white !important;
+  border-radius: 15px;
+}
+
+.blur-bg {
+  width: 100%;
+  height: 90vh;
+  background-image: url("/blur.jpg");
+  background-size: cover !important;
+  background-position: top;
+  background-repeat: no-repeat;
+  z-index: 200;
+}
+
+.center-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hover-link:hover {
+  text-decoration: underline !important;
+  font-weight: bold;
+}
+
+@media (max-width: 600px) {
+  .endshift-btn {
+    margin-right: 0 !important;
+    margin-top: 0.5rem !important;
+  }
+  .d-btn-row .d-btn {
+    font-size: 14px !important;
+  }
+  .v-card__title h3,
+  h3 {
+    font-size: 20px !important;
+  }
+  .common-text,
+  p {
+    font-size: 14px !important;
+  }
+}
+
+.col {
+  text-align: right !important;
+}
+
+.table-link {
+  text-decoration: underline !important;
+  cursor: pointer;
+}
+
+.disabled-fields {
+  border: 1px solid rgb(163, 163, 163);
+  color: grey;
+  border-radius: 6px;
+  padding: 8px 12px;
+  width: 100%;
+  min-height: 28px;
+  position: relative;
+  padding-top: 10px;
+  .label {
+    position: absolute;
+    top: -12px;
+    right: 12px;
+    font-size: 0.8rem;
+    color: grey;
+    background-color: #fff;
+    padding: 0 10px;
+    border-radius: 10px;
+  }
+}
+
+.file-div {
+  padding: 2rem 2rem !important;
+  border: 2px solid $primary;
+  border-radius: 10px;
+}
+
+.hover-tr {
+  cursor: pointer;
+  &:hover{
+    background-color:rgb(236, 236, 236) !important;
+  }
+}
+
+.payment-upload{
+  .v-file-input__text{
+    display: none !important; 
+  }
+}

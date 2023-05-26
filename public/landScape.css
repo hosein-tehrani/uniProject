@@ -1,0 +1,33 @@
+*{
+    direction: rtl;
+    text-align: right;
+    font-family: projectMainFont;
+}
+body{
+    margin: 10px;
+}
+td,th{
+    font-size:85%;
+}
+@media print {
+    *{
+        direction: rtl;
+        text-align: right;
+        font-family: projectMainFont;
+      }
+    body{
+        margin: 10px;
+    }
+    table{
+        break-inside: avoid;
+    }
+    .break-avoid{
+        break-inside: avoid;
+    }
+    @page {
+    }
+}
+@font-face {
+font-family: projectMainFont;
+src: url("./Vazir.ttf");
+}  

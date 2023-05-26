@@ -1,0 +1,35 @@
+.vpd-actions button:nth-child(1) {
+  background-color: $primary;
+  color: #fff !important;
+  border-radius: 6px;
+  transition: .3s;
+}
+
+.vpd-actions button:nth-child(1):hover {
+  opacity: .8;
+  background-color: $primary !important;
+}
+
+.vpd-actions button:nth-child(2) {
+  color: $cancel !important;
+  border-radius: 6px;
+  border: 1px solid $cancel;
+}
+
+.vpd-actions button:nth-child(3) {
+  border-radius: 6px;
+  border: 1px solid $primary;
+  color: $primary !important;
+}
+
+.vpd-actions {
+  text-align: center !important;
+}
+
+.vpd-day:not([disabled]).vpd-selected{
+  color:rgba(0, 0, 0, 0.6) ;
+}
+.vpd-day:not([disabled]).vpd-selected .vpd-day-effect,
+.vpd-addon-list-item.vpd-selected{
+  background-color: $primary!important;
+}

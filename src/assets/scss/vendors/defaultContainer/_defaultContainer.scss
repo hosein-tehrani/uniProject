@@ -1,0 +1,44 @@
+.defaultContainer-component{
+
+.navbar {
+    padding: 0 1rem !important;
+  }
+  .breadcrumb {
+    z-index: 50;
+  }
+  .app-footer {
+    z-index: 50;
+  }
+  .app-body{
+    margin-top:68px !important; ;
+  }
+  .element {
+    background-color:$background;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 55px;
+    left: 0;
+  }
+  @media print {
+    .main-mr{
+      margin-right: 0 !important;
+    }
+    .app-body{
+      margin: 0 !important;
+    }
+    .dontPrint {
+      display: none;
+    }
+  }
+  
+  .main{
+    min-height: calc(100vh - 165px) ;
+  }
+
+  .main-mr {
+    margin-right: 260px;
+    transition: all .2s;
+  }
+    
+}

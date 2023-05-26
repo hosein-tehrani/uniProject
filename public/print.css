@@ -1,0 +1,66 @@
+* {
+  direction: rtl;
+  text-align: right;
+  font-family: projectMainFont;
+}
+.v-tab {
+  display: none !important;
+}
+
+.v-tab--active {
+  display: block !important;
+}
+
+.disabled-fields {
+  border: 1px solid rgb(163, 163, 163);
+  color: grey;
+  border-radius: 6px;
+  padding: 8px 12px;
+  width: 100%;
+  min-height: 28px;
+  position: relative;
+  padding-top: 10px;
+}
+
+.disabled-fields.label {
+  position: absolute;
+  top: -12px;
+  right: 12px;
+  font-size: 0.8rem;
+  color: grey !important;
+  background-color: #fff;
+  padding: 0 10px;
+  border-radius: 10px;
+}
+
+.description-class{
+  line-height:38px ;
+  text-align: justify ;
+}
+body {
+  margin: 20px;
+}
+@media print {
+  * {
+    direction: rtl;
+    text-align: right;
+    font-family: projectMainFont;
+  }
+  body {
+    margin: 20px;
+  }
+  table {
+    break-inside: avoid;
+  }
+  .break-avoid {
+    break-inside: avoid;
+  }
+
+  .primary--text {
+    color: #00a7b7;
+  }
+}
+@font-face {
+  font-family: projectMainFont;
+  src: url("./IRANSans(FaNum).ttf");
+}

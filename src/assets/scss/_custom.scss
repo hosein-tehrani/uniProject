@@ -1,0 +1,154 @@
+$primary: #00a7b7;
+$secondary: #7d8ec4;
+$black-font: #000000;
+$font-active-color: #fff;
+$sidebar-bg: #fff;
+$dropdown-bg: #a3a3a3;
+$icon-color: #73818f;
+$sidebar-hover-bg: #7d8ec4;
+$sidebar-minimizer: #cccccc;
+$sidebar-minimizer-hover: #b2b2b2;
+
+$border-input: rgb(133, 133, 133);
+// notify
+.notification-title,
+.notification-content {
+  text-align: right !important;
+}
+.globalChart {
+  .tables {
+    display: none;
+  }
+  @media only screen and (max-width: 500px) {
+    .pies {
+      display: none !important;
+    }
+    .tables {
+      display: block !important;
+    }
+  }
+}
+
+// bootstrap
+.btn-primary {
+  background-color: $primary !important;
+  border-color: $primary !important;
+  border-radius: 8px !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background-color: lighten($primary, 5%) !important;
+  }
+}
+.text-primary {
+  color: $primary !important;
+}
+.nav-pills .nav-link.active {
+  background-color: $primary !important;
+}
+
+@import "node_modules/bootstrap/scss/bootstrap";
+
+// bootstrap-vue
+@import "node_modules/bootstrap-vue/src/index.scss";
+.bg-primary {
+  background-color: $primary !important;
+}
+
+// Here you can add other styles
+
+label.custom-file-label {
+  text-align: left;
+}
+
+//vue select
+.ui.selection.dropdown > .delete.icon,
+.ui.selection.dropdown > .search.icon {
+  right: auto;
+  left: 1em;
+}
+
+.ui.selection.dropdown .menu > .item {
+  text-align: right;
+}
+
+.ui.selection .text {
+  text-align: right;
+  right: auto;
+}
+
+// input number spinner => hide
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.table .thead-dark th {
+  color: #fff;
+  background-color: #00cc99;
+  border-color: #00cc99;
+}
+
+.card.bg-success.text-white {
+  background-color: #16a66a !important;
+}
+
+.card.bg-primary.text-white {
+  background-color: #0c4961 !important;
+}
+
+.card.bg-warning.text-white {
+  // background-color: #c2c21b !important;
+  border: 0;
+}
+
+.card.bg-danger.text-white {
+  background-color: #b82c4a !important;
+  border: 0;
+}
+
+.bg-success {
+  background-color: #00cc99 !important;
+}
+
+.btn-success {
+  color: #fff;
+  background-color: #00dba5;
+  border-color: #00dba5;
+}
+
+.border-dark {
+  border-color: #f4faff !important;
+}
+
+.Vue-Toastification__container {
+  text-align: center;
+}
+
+//// Variable overrides
+.vpd-day-effect,
+.vpd-content {
+  border-radius: 10px;
+}
+
+.vpd-header {
+  border-bottom: 1px solid #b7b7b7;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.vpd-month-label {
+  font-size: 14px;
+}
+
+.vpd-month-label > span:hover,
+.vpd-month-label > span:focus,
+.vpd-month-label > span:active {
+  color: rgba(0, 0, 0, 0.6) !important;
+}
+
+.pointer{
+  cursor: pointer
+}
