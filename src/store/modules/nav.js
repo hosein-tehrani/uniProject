@@ -21,11 +21,11 @@ const state = {
         route: "/prof/report",
         icon: "fa fa-file-text-o",
       },
-      {
-        name: "تغییر رمز عبور",
-        route: "/prof/changePassword",
-        icon: "fa fa-lock",
-      },
+      // {
+      //   name: "تغییر رمز عبور",
+      //   route: "/prof/changePassword",
+      //   icon: "fa fa-lock",
+      // },
     ],
     adminItems: [
       {
@@ -48,11 +48,11 @@ const state = {
         route: "/admin/Classes",
         icon: "fa fa-users",
       },
-      {
-        name: "تغییر رمز عبور",
-        route: "/admin/changePassword",
-        icon: "fa fa-lock",
-      },
+      // {
+      //   name: "تغییر رمز عبور",
+      //   route: "/admin/changePassword",
+      //   icon: "fa fa-lock",
+      // },
     ],
   },
 };

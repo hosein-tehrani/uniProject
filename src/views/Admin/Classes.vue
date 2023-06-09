@@ -74,19 +74,123 @@
           </template>
         </b-table>
         </v-card>
-        <v-dialog width="400" v-model="newClassDialog">
+        <v-dialog width="400" v-model="newLessonDialog">
+        <v-card>
+          <v-card-title>
+          <h3>افزودن عنوان درس</h3>
+        </v-card-title>
+        <v-card-text>
+          <v-text-field
+              label="عنوان درس"
+              v-model="newLesson.title"
+              :disabled="isBusy"
+              outlined
+              dense
+          ></v-text-field>
+          <v-text-field
+              label="توضیحات"
+              v-model="newLesson.description"
+              :disabled="isBusy"
+              outlined
+              dense
+          ></v-text-field>
+          <v-btn
+          class="secondary-btn"
+          :loading="isBusy"
+          :disabled="!newLesson.title"
+          @click="addLesson()"
+          >ثبت</v-btn
+        >
+        </v-card-text>
+
+        </v-card>
+      </v-dialog>
+        <v-dialog width="500" v-model="newClassDialog">
         <v-card>
           <v-card-title>
           <h3>افزودن کلاس</h3>
         </v-card-title>
         <v-card-text>
-          <v-text-field
-              label="کلاس"
+          <v-row>
+            <v-col cols="8">
+              <v-autocomplete 
+              label="انتخاب عنوان درس" 
               v-model="newClass.title"
-              :disabled="isBusy"
+              :items="Lessons" 
+              item-text="show"
+              item-value="title"
+              clearable
               outlined
-              dense
-          ></v-text-field>
+              :disabled="isBusy" 
+              dense></v-autocomplete>
+            </v-col>
+            <v-col cols="2">
+              <v-btn variant="primary" outlined @click="openAddLesson">افزودن عنوان</v-btn>
+            </v-col>
+          </v-row>
+          <v-select v-model="newClass.day" label="روز کلاس" :items="days"></v-select>
+          <v-row class="time-row">
+              <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+                <span id="timeFrom">
+                  <v-text-field
+                    outlined
+                    dense
+                    append-icon="schedule"
+                    v-model="newClass.startTime"
+                    label="از ساعت"
+                    :editable="true"
+                    class="date-input"
+                  >
+                  </v-text-field>
+                </span>
+
+                <date-picker
+                  v-model="newClass.startTime"
+                  element="timeFrom"
+                  color="#00a7b7"
+                  type="time"
+                />
+              </v-col>
+              <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+                <span id="timeTo">
+                  <v-text-field
+                    outlined
+                    dense
+                    append-icon="schedule"
+                    v-model="newClass.endTime"
+                    label="تا ساعت"
+                    :editable="true"
+                    class="date-input"
+                  >
+                  </v-text-field>
+                </span>
+
+                <date-picker
+                  v-model="newClass.endTime"
+                  element="timeTo"
+                  color="#00a7b7"
+                  type="time"
+                />
+              </v-col>
+            </v-row>
+          <v-radio-group
+            v-model="newClass.gender"
+            row
+          >
+            <v-radio
+              label="مختلط"
+              value="all"
+            ></v-radio>
+            <v-radio
+              label="برادران"
+              value="boys"
+            ></v-radio>
+            <v-radio
+              label="خواهران"
+              value="girls"
+            ></v-radio>
+          </v-radio-group>
+
           <v-text-field
               label="توضیحات"
               v-model="newClass.description"
@@ -158,16 +262,23 @@
 </template>
 <script>
 import moment from "moment-jalaali";
+import VuePersianDatetimePicker from "vue-persian-datetime-picker";
 export default {
+  components: {
+    datePicker: VuePersianDatetimePicker
+  },
   data() {
     return {
       newClass:{title:'',description:''},
+      newLesson:{title:'',description:''},
       selectedClass:{},
+      newLessonDialog: false,
       newClassDialog: false,
       removeClassDialog: false,
       editClassDialog: false,
       isBusy: false,
       Classes: [],
+      Lessons: [],
       Fields: [
         { key: "index", label: "#" },
         { key: "title", label: "عنوان درس" },
@@ -179,11 +290,23 @@ export default {
         { key: "mobile", label: "تلفن همراه" },
         { key: "email", label: "ایمیل" }
       ],
+      days:[
+        {text:'شنبه',value:'Saturday'},
+        {text:'یکشنبه',value:'Sunday'},
+        {text:'دوشنبه',value:'Monday'},
+        {text:'سه شنبه',value:'Tuesday'},
+        {text:'چهارشنبه',value:'Wednesday'},
+        {text:'پنج شنبه',value:'Thursday'},
+        {text:'جمعه',value:'Friday'},
+      ],
+      timeFrom: "",
+      timeTo: "",
       currentDate: moment(new Date()).format("jYYYY-jMM-jDD")
     };
   },
   mounted(){
     this.getClasses();
+    this.getLessons();
   },
   methods:{
     getClasses(){
@@ -211,8 +334,75 @@ export default {
           this.toast(err, "error");
         });
     },
+    getLessons(){
+      this.$http
+        .get(
+          this.baseUrl + "/api/v1/admin/lesson",
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            if (res.data.response.status == 200) {
+              this.Lessons = res.data.response.data
+              return this.newClass.title
+            } else {
+              this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
+            }
+          } else {
+            this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
+          }
+        })
+        .catch((err) => {
+          this.toast(err, "error");
+        });
+    }, 
+    openAddLesson(){
+      this.newLesson = {title:'',description:''}
+      this.newLessonDialog = true
+    },
+    addLesson(){
+      this.isBusy = true;
+      this.$http
+        .post(
+          this.baseUrl + "/api/v1/admin/lesson",
+          {
+            ...this.newLesson
+          },
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status == 201) {
+              this.newLessonDialog = false;
+              this.toast("عنوان با موفقیت اضافه شد", "success");
+              this.getLessons();
+              this.newClass.title = this.newLesson.title
+          } else {
+            this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
+          }
+          this.isBusy = false;
+        })
+        .catch((err) => {
+          this.toast(err, "error");
+          this.isBusy = false;
+        });
+    },
     openAddClass(){
-      this.newClass = {title:'',description:''}
+      this.newClass = {
+        title:'',
+        description:'',
+        gender:'all',
+        startTime:'',
+        endTime:'',
+        day:''
+    }
       this.newClassDialog = true
     },
     openDeleteClass(prof){
