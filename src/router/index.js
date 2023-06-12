@@ -43,9 +43,9 @@ export default new Router({
           component: Dashboard,
         },
         {
-          path: "/prof/Requests",
-          name: "مدیریت درخواست‌ها",
-          component: Requests,
+          path: "/prof/Classes",
+          name: "کلاس‌ها",
+          component: Classes,
         },
         {
           path: "/prof/changePassword",

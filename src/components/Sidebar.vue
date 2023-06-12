@@ -125,7 +125,7 @@ export default {
           if (res.status == 200) {
             if (res.data.response.status == 200) {
               this.setUserName(res.data.response.data.name);
-              localStorage.setItem("role", res.data.response.data.role);
+              localStorage.setItem("role", res.data.response.data.role === 'admin' ? 'admin' : 'prof');
             } else {
               this.toast("نشست شما در سامانه منقضی شده است", "error");
               this.$router.push("/login");
@@ -161,7 +161,7 @@ export default {
       let nav =
         this.role == "admin"
           ? all.adminItems
-          : all.teacherItems;
+          : all.profItems;
       return nav;
     },
 

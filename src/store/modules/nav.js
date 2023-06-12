@@ -1,31 +1,26 @@
 const state = {
   nav: {
-    teacherItems: [
+    profItems: [
       {
         name: "خانه",
         route: "/prof/dashboard",
         icon: "home",
       },
       {
-        name: "مدیریت بیماران",
-        route: "/prof/Patients",
+        name: "کلاس‌ها",
+        route: "/prof/classes",
         icon: "fa fa-users",
       },
       {
-        name: "کادر درمان",
-        route: "/prof/doctors",
-        icon: "fa fa-user-md",
-      },
-      {
-        name: "گزارش کادر درمان",
-        route: "/prof/report",
+        name: "کلاس‌های من",
+        route: "/prof/myClasses",
         icon: "fa fa-file-text-o",
       },
-      // {
-      //   name: "تغییر رمز عبور",
-      //   route: "/prof/changePassword",
-      //   icon: "fa fa-lock",
-      // },
+      {
+        name: "تغییر رمز عبور",
+        route: "/prof/changePassword",
+        icon: "fa fa-lock",
+      },
     ],
     adminItems: [
       {
@@ -48,11 +43,11 @@ const state = {
         route: "/admin/Classes",
         icon: "fa fa-users",
       },
-      // {
-      //   name: "تغییر رمز عبور",
-      //   route: "/admin/changePassword",
-      //   icon: "fa fa-lock",
-      // },
+      {
+        name: "تغییر رمز عبور",
+        route: "/admin/changePassword",
+        icon: "fa fa-lock",
+      },
     ],
   },
 };

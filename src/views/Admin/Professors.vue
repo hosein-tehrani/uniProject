@@ -190,6 +190,7 @@
 </template>
 <script>
 import moment from "moment-jalaali";
+import md5 from "js-md5";
 export default {
 
   data() {
@@ -209,9 +210,9 @@ export default {
         { key: "operation", label: "عملیات" },
       ],
       excelFields: [
-        { key: "name", label: "نام و نام خانوادگی" },
-        { key: "mobile", label: "تلفن همراه" },
-        { key: "email", label: "ایمیل" }
+        { field: "name", label: "نام و نام خانوادگی" },
+        { field: "mobile", label: "تلفن همراه" },
+        { field: "email", label: "ایمیل" }
       ],
       currentDate: moment(new Date()).format("jYYYY-jMM-jDD")
     };
@@ -263,7 +264,8 @@ export default {
         .post(
           this.baseUrl + "/api/v1/admin/user",
           {
-            ...this.newProf
+            ...this.newProf,
+            password: md5(this.newProf.password)
           },
           {
             headers: {

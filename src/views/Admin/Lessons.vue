@@ -14,11 +14,12 @@
       <v-col>
       </v-col>
     </v-row>
-
+    <v-text-field v-model="search" dense outlined label="جستوجو"></v-text-field>
           <b-table
           bordered
           :fields="Fields"
           :items="Lessons"
+          :filter='search'
           small="small"
           responsive
         >
@@ -151,10 +152,10 @@ export default {
       editLessonDialog: false,
       isBusy: false,
       Lessons: [],
+      search: '',
       Fields: [
         { key: "index", label: "#" },
         { key: "title", label: "عنوان درس" },
-        { key: "description", label: "توضیحات" },
         { key: "operation", label: "عملیات" },
       ],
     };

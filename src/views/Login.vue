@@ -255,13 +255,6 @@ export default {
   methods: {
     ...mapMutations(["setUserName", "setRole"]),
     gotoDashboard() {
-      let role = this.username
-      localStorage.setItem("role", role);
-      if (role == "prof") {
-        this.$router.push("/reception/dashboard");
-      } else if (role == "admin") {
-        this.$router.push("/admin/dashboard");
-      }
       // showing dash by sending our user and pass then with checking our information by server info we get our dash
       this.busy = true;
       this.$http
@@ -275,15 +268,11 @@ export default {
           if (res.status == 200) {
             localStorage.clear();
             localStorage.setItem("token", res.data.response.data.token);
-            localStorage.setItem("role", res.data.response.data.role);
-            let role = res.data.response.data.role;
+            localStorage.setItem("role", res.data.response.data.role === 'admin' ? 'admin' : 'prof');
+            let role = res.data.response.data.role === 'admin' ? 'admin' : 'prof';
             this.setUserName(res.data.response.data.name);
             this.setRole(role);
-            if (role == "reception") {
-              this.$router.push("/reception/dashboard");
-            } else if (role == "admin") {
-              this.$router.push("/admin/dashboard");
-            }
+              this.$router.push(`/${role}/dashboard`);
           } else {
             this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
           }

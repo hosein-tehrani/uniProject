@@ -2,40 +2,42 @@
   <div class="animated fadeIn">
     <v-col cols="12">
         <v-card class="br-card p-3">
-          <v-row>
-      <v-col>
-        <v-btn
-          style="float: right"
-          class="secondary-btn mb-3 mt-2"
-          @click="openAddClass()"
-          >افزودن کلاس</v-btn
-        >
-      </v-col>
-      <v-col>
-        <v-btn
-          style="float: left"
-          class="secondary-btn mb-3 mt-2"
-          :disabled="Classes.length==0"
-          @click="$refs.renderedExcel.$el.click()"
-          >دریافت اکسل</v-btn
-        >
-        <vue-excel-xlsx
-          v-show="false"
-          ref="renderedExcel"
-          :data="Classes"
-          :columns="excelFields"
-          filename="لیست اساتید"
-          :sheetname="currentDate"
-        >
-          دریافت اکسل
-        </vue-excel-xlsx>
-      </v-col>
-    </v-row>
+          <v-row v-if="role === 'admin'">
+            <v-col>
+              <v-btn
+                style="float: right"
+                class="secondary-btn mb-3 mt-2"
+                @click="openAddClass()"
+                >افزودن کلاس</v-btn
+              >
+            </v-col>
+            <v-col>
+              <v-btn
+                style="float: left"
+                class="secondary-btn mb-3 mt-2"
+                :disabled="Classes.length==0"
+                @click="$refs.renderedExcel.$el.click()"
+                >دریافت اکسل</v-btn
+              >
+              <vue-excel-xlsx
+                v-show="false"
+                ref="renderedExcel"
+                :data="Classes"
+                :columns="excelFields"
+                filename="لیست دروس"
+                :sheetname="currentDate"
+              >
+                دریافت اکسل
+              </vue-excel-xlsx>
+            </v-col>
+          </v-row>
+    <v-text-field v-model="search" dense outlined label="جستوجو" class="mt-3"></v-text-field>
 
           <b-table
           bordered
-          :fields="Fields"
+          :fields="computedFields"
           :items="Classes"
+          :filter="search"
           small="small"
           responsive
         >
@@ -62,6 +64,18 @@
                 class="ms-2 me-2 primary-btn pa-2"
                 @click="openEditClass(data.item)"
                 >ویرایش</v-btn
+              >
+            </div>
+          </template>
+          <template v-slot:cell(profOperation)="data">
+            <div
+              style="text-align: center; vertical-align: middle"
+            >
+              <v-btn
+                :disabled="data.item.status === 'اخذ شده'"
+                class="ms-2 me-2 primary-btn pa-2"
+                @click="choose(data.item)"
+                >اخذ کلاس</v-btn
               >
             </div>
           </template>
@@ -128,7 +142,7 @@
               <v-btn variant="primary" outlined @click="openAddLesson">افزودن عنوان</v-btn>
             </v-col>
           </v-row>
-          <v-select v-model="newClass.day" label="روز کلاس" :items="days"></v-select>
+          <v-select v-model="newClass.day" outlined dense label="روز کلاس" :items="days"></v-select>
           <v-row class="time-row">
               <v-col cols="6" sm="6" md="6" lg="6" xl="6">
                 <span id="timeFrom">
@@ -271,24 +285,102 @@ export default {
     return {
       newClass:{title:'',description:''},
       newLesson:{title:'',description:''},
+      role: window.localStorage.role,
       selectedClass:{},
       newLessonDialog: false,
       newClassDialog: false,
       removeClassDialog: false,
       editClassDialog: false,
       isBusy: false,
-      Classes: [],
-      Lessons: [],
+      search:'',
+      Classes: [
+        {title:'ریاضی مهندسی',
+        startTime: '10:00',
+        endTime: '12:15',
+        day: 'سه شنبه',
+        gender: 'مختلط',
+        status: 'اخذ شده',
+        teacher: 'رضا بشمنی'
+        },
+        {
+        title:'ریاضی ۱',
+        startTime: '10:00',
+        endTime: '12:15',
+        day: 'یک شنبه',
+        gender: 'مختلط',
+        status: 'اخذ شده',
+        teacher: 'حمید دریلی'
+        },
+        {
+        title:'فیزیک ۱',
+        startTime: '8:00',
+        endTime: '10:15',
+        day: 'چهار شنبه',
+        gender: 'مختلط',
+        status: 'اخذ شده',
+        teacher: 'رامین رستمی'
+        },
+        {
+        title:'آز فیزیک',
+        startTime: '8:00',
+        endTime: '9:30',
+        day: 'سه شنبه',
+        gender: 'مختلط',
+        status: 'اخذ نشده',
+        teacher: '-'
+        },
+        {
+        title:'ورزش ۱',
+        description:' رشته کامپیوتر - روانشناسی - صنایع',
+        startTime: '9:30',
+        endTime: '11:00',
+        day: 'دو شنبه',
+        gender: 'برادران',
+        status: 'اخذ شده',
+        teacher: 'کامران مقدمی'
+        },
+        {
+        title:'دانش خانواده',
+        description:' رشته کامپیوتر - روانشناسی - صنایع',
+        startTime: '9:00',
+        endTime: '10:30',
+        day: 'دو شنبه',
+        gender: 'برادران',
+        status: 'اخذ نشده',
+        teacher: '-'
+        }],
+      Lessons: [
+      ],
       Fields: [
         { key: "index", label: "#" },
         { key: "title", label: "عنوان درس" },
         { key: "description", label: "توضیحات" },
+        { key: "day", label: "روز" },
+        { key: "startTime", label: "از شروع" },
+        { key: "endTime", label: "تا پایان" },
+        { key: "gender", label: "جنسیت" },
+        { key: "teacher", label: "استاد" },
+        { key: "status", label: "وضعیت" },
         { key: "operation", label: "عملیات" },
       ],
+      profFields: [
+        { key: "index", label: "#" },
+        { key: "title", label: "عنوان درس" },
+        { key: "description", label: "توضیحات" },
+        { key: "day", label: "روز" },
+        { key: "startTime", label: "از شروع" },
+        { key: "endTime", label: "تا پایان" },
+        { key: "gender", label: "جنسیت" },
+        { key: "profOperation", label: "عملیات" },
+      ],
       excelFields: [
-        { key: "name", label: "نام و نام خانوادگی" },
-        { key: "mobile", label: "تلفن همراه" },
-        { key: "email", label: "ایمیل" }
+        { field: "title", label: "عنوان درس" },
+        { field: "day", label: "روز" },
+        { field: "startTime", label: "از شروع" },
+        { field: "endTime", label: "تا پایان" },
+        { field: "gender", label: "جنسیت" },
+        { field: "teacher", label: "استاد" },
+        { field: "status", label: "وضعیت" },
       ],
       days:[
         {text:'شنبه',value:'Saturday'},
@@ -305,8 +397,14 @@ export default {
     };
   },
   mounted(){
-    this.getClasses();
+    // this.getClasses();
     this.getLessons();
+  },
+  computed:{
+    computedFields(){
+      let fields = this.role === 'admin' ? this.Fields : this.profFields
+      return fields
+    }
   },
   methods:{
     getClasses(){
@@ -412,6 +510,11 @@ export default {
     openEditClass(prof){
       this.selectedClass = JSON.parse(JSON.stringify(prof))
       this.editClassDialog = true
+    },
+    choose(){
+      setTimeout(() => {
+        this.toast("کلاس با موفقیت برای شما اخذ شد", "success");
+      }, 500);
     },
     addClass(){
       this.isBusy = true;
