@@ -22,7 +22,7 @@
               <vue-excel-xlsx
                 v-show="false"
                 ref="renderedExcel"
-                :data="Classes"
+                :data="excelClasses"
                 :columns="excelFields"
                 filename="لیست دروس"
                 :sheetname="currentDate"
@@ -51,6 +51,26 @@
               {{ data.value }}
             </div>
           </template>
+          <template v-slot:cell(day)="data">
+            <div style="text-align: center; vertical-align: middle">
+              {{ persianDay(data.value) }}
+            </div>
+          </template>
+          <template v-slot:cell(gender)="data">
+            <div style="text-align: center; vertical-align: middle">
+              {{ persianGender(data.value) }}
+            </div>
+          </template>
+          <template v-slot:cell(description)="data">
+            <div style="text-align: center; vertical-align: middle">
+              {{ data.value ? data.value : '---' }}
+            </div>
+          </template>
+          <template v-slot:cell(teacher)="data">
+            <div style="text-align: center; vertical-align: middle">
+              {{ data.item.status === 'reserved' ? data.item.teacherId.name : '---' }}
+            </div>
+          </template>
           <template v-slot:cell(operation)="data">
             <div
               style="text-align: center; vertical-align: middle"
@@ -72,10 +92,10 @@
               style="text-align: center; vertical-align: middle"
             >
               <v-btn
-                :disabled="data.item.status === 'اخذ شده'"
+                :disabled="data.item.status !== 'open'"
                 class="ms-2 me-2 primary-btn pa-2"
                 @click="choose(data.item)"
-                >اخذ کلاس</v-btn
+                >{{ data.item.status === 'open' ? 'اخذ کلاس' : 'اخذ شده' }}</v-btn
               >
             </div>
           </template>
@@ -197,11 +217,11 @@
             ></v-radio>
             <v-radio
               label="برادران"
-              value="boys"
+              value="boy"
             ></v-radio>
             <v-radio
               label="خواهران"
-              value="girls"
+              value="girl"
             ></v-radio>
           </v-radio-group>
 
@@ -294,73 +314,73 @@ export default {
       isBusy: false,
       search:'',
       Classes: [
-        {title:'ریاضی مهندسی',
-        startTime: '10:00',
-        endTime: '12:15',
-        day: 'سه شنبه',
-        gender: 'مختلط',
-        status: 'اخذ شده',
-        teacher: 'رضا بشمنی'
-        },
-        {
-        title:'ریاضی ۱',
-        startTime: '10:00',
-        endTime: '12:15',
-        day: 'یک شنبه',
-        gender: 'مختلط',
-        status: 'اخذ شده',
-        teacher: 'حمید دریلی'
-        },
-        {
-        title:'فیزیک ۱',
-        startTime: '8:00',
-        endTime: '10:15',
-        day: 'چهار شنبه',
-        gender: 'مختلط',
-        status: 'اخذ شده',
-        teacher: 'رامین رستمی'
-        },
-        {
-        title:'آز فیزیک',
-        startTime: '8:00',
-        endTime: '9:30',
-        day: 'سه شنبه',
-        gender: 'مختلط',
-        status: 'اخذ نشده',
-        teacher: '-'
-        },
-        {
-        title:'ورزش ۱',
-        description:' رشته کامپیوتر - روانشناسی - صنایع',
-        startTime: '9:30',
-        endTime: '11:00',
-        day: 'دو شنبه',
-        gender: 'برادران',
-        status: 'اخذ شده',
-        teacher: 'کامران مقدمی'
-        },
-        {
-        title:'دانش خانواده',
-        description:' رشته کامپیوتر - روانشناسی - صنایع',
-        startTime: '9:00',
-        endTime: '10:30',
-        day: 'دو شنبه',
-        gender: 'برادران',
-        status: 'اخذ نشده',
-        teacher: '-'
-        }],
+        // {title:'ریاضی مهندسی',
+        // startTime: '10:00',
+        // endTime: '12:15',
+        // day: 'سه شنبه',
+        // gender: 'مختلط',
+        // status: 'اخذ شده',
+        // teacher: 'رضا بشمنی'
+        // },
+        // {
+        // title:'ریاضی ۱',
+        // startTime: '10:00',
+        // endTime: '12:15',
+        // day: 'یک شنبه',
+        // gender: 'مختلط',
+        // status: 'اخذ شده',
+        // teacher: 'حمید دریلی'
+        // },
+        // {
+        // title:'فیزیک ۱',
+        // startTime: '8:00',
+        // endTime: '10:15',
+        // day: 'چهار شنبه',
+        // gender: 'مختلط',
+        // status: 'اخذ شده',
+        // teacher: 'رامین رستمی'
+        // },
+        // {
+        // title:'آز فیزیک',
+        // startTime: '8:00',
+        // endTime: '9:30',
+        // day: 'سه شنبه',
+        // gender: 'مختلط',
+        // status: 'اخذ نشده',
+        // teacher: '-'
+        // },
+        // {
+        // title:'ورزش ۱',
+        // description:' رشته کامپیوتر - روانشناسی - صنایع',
+        // startTime: '9:30',
+        // endTime: '11:00',
+        // day: 'دو شنبه',
+        // gender: 'برادران',
+        // status: 'اخذ شده',
+        // teacher: 'کامران مقدمی'
+        // },
+        // {
+        // title:'دانش خانواده',
+        // description:' رشته کامپیوتر - روانشناسی - صنایع',
+        // startTime: '9:00',
+        // endTime: '10:30',
+        // day: 'دو شنبه',
+        // gender: 'برادران',
+        // status: 'اخذ نشده',
+        // teacher: '-'
+        // }
+      ],
       Lessons: [
       ],
       Fields: [
         { key: "index", label: "#" },
         { key: "title", label: "عنوان درس" },
-        { key: "description", label: "توضیحات" },
         { key: "day", label: "روز" },
         { key: "startTime", label: "از شروع" },
         { key: "endTime", label: "تا پایان" },
         { key: "gender", label: "جنسیت" },
         { key: "teacher", label: "استاد" },
-        { key: "status", label: "وضعیت" },
+        { key: "description", label: "توضیحات" },
         { key: "operation", label: "عملیات" },
       ],
       profFields: [
@@ -379,8 +399,8 @@ export default {
         { field: "startTime", label: "از شروع" },
         { field: "endTime", label: "تا پایان" },
         { field: "gender", label: "جنسیت" },
-        { field: "teacher", label: "استاد" },
         { field: "status", label: "وضعیت" },
+        { field: "teacher", label: "استاد" },
       ],
       days:[
         {text:'شنبه',value:'Saturday'},
@@ -391,26 +411,57 @@ export default {
         {text:'پنج شنبه',value:'Thursday'},
         {text:'جمعه',value:'Friday'},
       ],
+      genders:[
+        {text:'برادران',value:'boy'},
+        {text:'خواهران',value:'girl'},
+        {text:'مختلط',value:'all'}
+      ],
       timeFrom: "",
       timeTo: "",
       currentDate: moment(new Date()).format("jYYYY-jMM-jDD")
     };
   },
   mounted(){
-    // this.getClasses();
-    this.getLessons();
+    this.getClasses();
+    if(this.role === 'admin'){
+      this.getLessons();
+    }
   },
   computed:{
     computedFields(){
       let fields = this.role === 'admin' ? this.Fields : this.profFields
       return fields
+    },
+    excelClasses(){
+      let exClasses = this.Classes.map(cls=>{
+        let day = this.persianDay(cls.day)
+        let gender = this.persianGender(cls.gender)
+        let teacher = cls.status === 'reserved' ? cls.teacherId.name : '---'
+        let status = cls.status === 'reserved' ? 'اخذ شده' : 'خالی'
+        return {
+          ...cls,
+          day,
+          gender,
+          status,
+          teacher
+        }
+      })
+      return exClasses
     }
   },
   methods:{
+    persianDay(day){
+      let Pday = this.days.filter(d=> d.value === day)[0].text
+      return Pday ? Pday : '---'
+    },
+    persianGender(gender){
+      let Pgender = this.genders.filter(g=> g.value === gender)[0].text
+      return Pgender ? Pgender : '---'
+    },
     getClasses(){
       this.$http
         .get(
-          this.baseUrl + "/api/v1/admin/class",
+          this.baseUrl + `/api/v1/${this.role === 'admin' ? 'admin' : 'user'}/class`,
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -511,10 +562,31 @@ export default {
       this.selectedClass = JSON.parse(JSON.stringify(prof))
       this.editClassDialog = true
     },
-    choose(){
-      setTimeout(() => {
-        this.toast("کلاس با موفقیت برای شما اخذ شد", "success");
-      }, 500);
+    choose(item){
+      this.isBusy = true;
+      this.$http
+        .put(
+          this.baseUrl + "/api/v1/user/submitClass/" + item._id,
+          {},
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status == 200) {
+              this.toast("کلاس با موفقیت برای شما اخذ شد", "success");
+              this.getClasses();
+          } else {
+            this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
+          }
+          this.isBusy = false;
+        })
+        .catch((err) => {
+          this.toast(err, "error");
+          this.isBusy = false;
+        });
     },
     addClass(){
       this.isBusy = true;
