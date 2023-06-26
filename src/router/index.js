@@ -12,7 +12,7 @@ const Requests = () => import("@/views/Requests");
 
 // prof PAGES
 const Dashboard = () => import("@/views/Prof/Dashboard");
-
+const MyClasses = () => import("@/views/Prof/MyClasses");
 // Admin PAGES
 
 const Professors = () => import("@/views/Admin/Professors");
@@ -46,6 +46,11 @@ export default new Router({
           path: "/prof/Classes",
           name: "کلاس‌ها",
           component: Classes,
+        },
+        {
+          path: "/prof/MyClasses",
+          name: "کلاس‌ها",
+          component: MyClasses,
         },
         {
           path: "/prof/changePassword",
