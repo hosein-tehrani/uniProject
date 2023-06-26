@@ -35,7 +35,7 @@ export default {
         setTimeout(() => {
           this.counter++;
           if (this.counter == 2) {
-            let role = this.role
+            let role = this.role === 'admin' ? 'admin' : 'prof'
             role
               ? this.$router.push("/" + role + "/dashboard")
               : this.$router.push("/login");
