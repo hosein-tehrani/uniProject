@@ -12,6 +12,9 @@
         >
       </v-col>
       <v-col>
+        <h4 class="my-2 text-center">لیست عناوین درسی</h4>
+      </v-col>
+      <v-col>
       </v-col>
     </v-row>
     <v-text-field v-model="search" dense outlined label="جستوجو"></v-text-field>

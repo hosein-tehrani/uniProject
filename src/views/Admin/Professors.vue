@@ -12,6 +12,9 @@
         >
       </v-col>
       <v-col>
+        <h4 class="my-2 text-center">لیست اساتید</h4>
+      </v-col>
+      <v-col>
         <v-btn
           style="float: left"
           class="secondary-btn mb-3 mt-2"

@@ -2,14 +2,32 @@
     <div class="animated fadeIn">
       <v-col cols="12">
           <v-card class="br-card p-3">
-            <v-row>
-        <v-col>
-            <h4>کلاس های من</h4>
-        </v-col>
-        <v-col>
-        </v-col>
-      </v-row>
-      <v-text-field v-model="search" dense outlined label="جستوجو"></v-text-field>
+            <v-row class="my-2">
+              <v-col>
+                  <h4>کلاس های من</h4>
+              </v-col>
+              <v-col>
+                <v-btn
+                  style="float: left"
+                  class="secondary-btn mb-3 mt-2"
+                  :disabled="classes.length==0"
+                  @click="$refs.renderedExcel.$el.click()"
+                  >دریافت اکسل</v-btn
+                >
+                <vue-excel-xlsx
+                  v-show="false"
+                  ref="renderedExcel"
+                  :data="excelClasses"
+                  :columns="excelFields"
+                  filename="لیست دروس"
+                  :sheetname="currentDate"
+                >
+                  دریافت اکسل
+                </vue-excel-xlsx>
+              </v-col>
+            </v-row>
+            
+            <v-text-field v-model="search" dense outlined label="جستوجو"></v-text-field>
             <b-table
             bordered
             :fields="Fields"
@@ -51,6 +69,7 @@
     </div>
   </template>
   <script>
+  import moment from "moment-jalaali";
   export default {
   
     data() {
@@ -66,7 +85,15 @@
           { key: "endTime", label: "تا پایان" },
           { key: "gender", label: "جنسیت" },
           { key: "description", label: "توضیحات" },
-        ],
+        ],      
+        excelFields: [
+        { field: "title", label: "عنوان درس" },
+        { field: "day", label: "روز" },
+        { field: "startTime", label: "از شروع" },
+        { field: "endTime", label: "تا پایان" },
+        { field: "gender", label: "جنسیت" },
+        { field: "description", label: "توضیحات" },
+      ],
         days:[
         {text:'شنبه',value:'Saturday'},
         {text:'یکشنبه',value:'Sunday'},
@@ -81,8 +108,23 @@
         {text:'خواهران',value:'girl'},
         {text:'مختلط',value:'all'}
       ],
+      currentDate: moment(new Date()).format("jYYYY-jMM-jDD")
       };
     },
+    computed:{
+    excelClasses(){
+      let exClasses = this.classes.map(cls=>{
+        let day = this.persianDay(cls.day)
+        let gender = this.persianGender(cls.gender)
+        return {
+          ...cls,
+          day,
+          gender
+        }
+      })
+      return exClasses
+    }
+  },
     mounted(){
       this.getMyClasses();
     },

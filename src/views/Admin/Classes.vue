@@ -2,8 +2,8 @@
   <div class="animated fadeIn">
     <v-col cols="12">
         <v-card class="br-card p-3">
-          <v-row v-if="role === 'admin'">
-            <v-col>
+          <v-row>
+            <v-col v-if="role === 'admin'">
               <v-btn
                 style="float: right"
                 class="secondary-btn mb-3 mt-2"
@@ -12,6 +12,9 @@
               >
             </v-col>
             <v-col>
+              <h4 class="my-2 text-center">لیست کلاس‌ها</h4>
+            </v-col>
+            <v-col v-if="role === 'admin'">
               <v-btn
                 style="float: left"
                 class="secondary-btn mb-3 mt-2"
