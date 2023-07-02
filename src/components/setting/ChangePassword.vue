@@ -67,7 +67,8 @@ export default {
       repeatPassword: "",
       show1: false,
       show2: false,
-      show3: false
+      show3: false,
+      role: window.localStorage.role,
     };
   },
 
@@ -76,13 +77,14 @@ export default {
       if (this.newPassword == this.repeatPassword) {
         //first check if our new pass was same as repeat password
         this.Busy = true;
+        let url = this.role === 'admin' ? '/api/v1/admin/editProfile' : '/api/v1/user/editProfile'
         this.$http
-          .post(
-            this.baseUrl + "/clinic/hr/resetPassword",
+          .put(
+            this.baseUrl + url,
             {
               //then we send old pass and new pass to server address that we've set before
               oldPass: md5(this.oldPassword),
-              newPass: md5(this.newPassword)
+              password: md5(this.newPassword)
             },
             {
               headers: {

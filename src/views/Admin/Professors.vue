@@ -9,6 +9,12 @@
           class="secondary-btn mb-3 mt-2"
           @click="openAddProf()"
           >افزودن استاد</v-btn
+        >        
+        <v-btn
+          style="float: right"
+          class="secondary-btn mb-3 mt-2 mx-3"
+          @click="openAddAdmin()"
+          >افزودن مدیرگروه</v-btn
         >
       </v-col>
       <v-col>
@@ -77,6 +83,53 @@
           </template>
         </b-table>
         </v-card>
+        <v-dialog width="400" v-model="newAdminDialog">
+        <v-card>
+          <v-card-title>
+          <h3>افزودن ادمین</h3>
+        </v-card-title>
+        <v-card-text>
+          <v-text-field
+                    label="نام و نام خانوادگی"
+                    v-model="newAdmin.name"
+                    :disabled="isBusy"
+                    outlined
+                    dense
+          ></v-text-field>
+          <v-text-field
+            label="شماره همراه"
+            v-model="newAdmin.mobile"
+            :disabled="isBusy"
+            outlined
+            dense
+          ></v-text-field>
+          <v-text-field
+            label="پست الکترونیک"
+            v-model="newAdmin.email"
+            :disabled="isBusy"
+            type="email"
+            outlined
+            dense
+          ></v-text-field>
+          <v-text-field
+            label="رمز عبور"
+            v-model="newAdmin.password"
+            :disabled="isBusy"
+            type="password"
+            outlined
+            dense
+          ></v-text-field>
+          <v-btn
+          class="secondary-btn"
+          :loading="isBusy"
+          :disabled="!newAdmin.mobile || !newAdmin.name || !newAdmin.password"
+          @click="addAdmin()"
+          >ثبت</v-btn
+        >
+        </v-card-text>
+
+        </v-card>
+      </v-dialog>
         <v-dialog width="400" v-model="newProfDialog">
         <v-card>
           <v-card-title>
@@ -199,8 +252,10 @@ export default {
   data() {
     return {
       newProf:{name:'',mobile:'',password:'',email: ''},
+      newAdmin:{name:'',mobile:'',password:'',email: ''},
       selectedProf:{},
       newProfDialog: false,
+      newAdminDialog: false,
       removeProfDialog: false,
       editProfDialog: false,
       isBusy: false,
@@ -253,6 +308,10 @@ export default {
       this.newProf = {name:'',mobile:'',password:'',email: ''}
       this.newProfDialog = true
     },
+    openAddAdmin(){
+      this.newAdmin = {name:'',mobile:'',password:'',email: ''}
+      this.newAdminDialog = true
+    },
     openDeleteProf(prof){
       this.selectedProf = prof
       this.removeProfDialog = true
@@ -280,6 +339,36 @@ export default {
           if (res.status == 201) {
               this.newProfDialog = false;
               this.toast("استاد با موفقیت اضافه شد", "success");
+              this.getProfs();
+          } else {
+            this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
+          }
+          this.isBusy = false;
+        })
+        .catch((err) => {
+          this.toast(err, "error");
+          this.isBusy = false;
+        });
+    },
+    addAdmin(){
+      this.isBusy = true;
+      this.$http
+        .post(
+          this.baseUrl + "/api/v1/admin/addAdmin",
+          {
+            ...this.newAdmin,
+            password: md5(this.newAdmin.password)
+          },
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status == 201) {
+              this.newAdminDialog = false;
+              this.toast("مدیرگروه با موفقیت اضافه شد", "success");
               this.getProfs();
           } else {
             this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
