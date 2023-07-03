@@ -63,8 +63,38 @@
                 {{ data.index + 1 }}
               </div>
             </template>
+            <template v-slot:cell(operation)="data">
+              <div
+                style="text-align: center; vertical-align: middle"
+              >
+  
+                <v-btn
+                  color="red"
+                  class="ms-2 me-2 primary-btn pa-2"
+                  @click="openFreeClass(data.item)"
+                  >حذف کلاس</v-btn
+                >
+              </div>
+            </template>
           </b-table>
           </v-card>
+          <v-dialog width="400" v-model="freeClassDialog">
+            <v-card>
+              <v-card-title>
+              <h3>حذف کلاس</h3>
+              </v-card-title>
+              <v-card-text>
+                  <h5 class="text-right">آیا از حذف کلاس  {{ selectedClass.title }} اطمینان دارید؟</h5>
+                  <v-btn
+                  class="secondary-btn"
+                  :loading="isBusy"
+                  @click="freeClass()"
+                  >حذف</v-btn
+                >
+              </v-card-text>
+  
+            </v-card>
+        </v-dialog>
       </v-col>
     </div>
   </template>
@@ -77,17 +107,21 @@
         isBusy: false,
         classes: [],
         search: '',
+        freeClassDialog: false,
         Fields: [
           { key: "index", label: "#" },
           { key: "title", label: "عنوان درس" },
+          { key: "unit", label: "تعداد واحد" },
           { key: "day", label: "روز" },
           { key: "startTime", label: "از شروع" },
           { key: "endTime", label: "تا پایان" },
           { key: "gender", label: "جنسیت" },
           { key: "description", label: "توضیحات" },
+          { key: "operation", label: "عملیات" },
         ],      
         excelFields: [
         { field: "title", label: "عنوان درس" },
+        { field: "unit", label: "تعداد واحد" },
         { field: "day", label: "روز" },
         { field: "startTime", label: "از شروع" },
         { field: "endTime", label: "تا پایان" },
@@ -108,7 +142,8 @@
         {text:'خواهران',value:'girl'},
         {text:'مختلط',value:'all'}
       ],
-      currentDate: moment(new Date()).format("jYYYY-jMM-jDD")
+      currentDate: moment(new Date()).format("jYYYY-jMM-jDD"),
+      selectedClass: {}
       };
     },
     computed:{
@@ -129,6 +164,37 @@
       this.getMyClasses();
     },
     methods:{
+      openFreeClass(clas){
+        this.selectedClass = clas
+        this.freeClassDialog = true
+      },
+      freeClass(){
+        this.isBusy = true;
+        this.$http
+          .put(
+            this.baseUrl + "/api/v1/user/unSubmitClass/" + this.selectedClass._id,
+            {},
+            {
+              headers: {
+                Authorization: localStorage.getItem("token"),
+              },
+            }
+          )
+          .then((res) => {
+            if (res.data.response.status == 200) {
+                this.freeClassDialog = false;
+                this.toast("کلاس با موفقیت حذف شد", "success");
+                this.getMyClasses();
+            } else {
+              this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
+            }
+            this.isBusy = false;
+          })
+          .catch((err) => {
+            this.toast(err, "error");
+            this.isBusy = false;
+          });
+      },
       getMyClasses(){
         this.$http
           .get(

@@ -78,6 +78,7 @@
             <div
               style="text-align: center; vertical-align: middle"
             >
+
               <v-btn
                 class="ms-2 me-2 primary-btn pa-2"
                 @click="openDeleteClass(data.item)"
@@ -87,6 +88,13 @@
                 class="ms-2 me-2 primary-btn pa-2"
                 @click="openEditClass(data.item)"
                 >ویرایش</v-btn
+              >
+              <v-btn
+                v-if="data.item.status === 'reserved'"
+                color="red"
+                class="ms-2 me-2 primary-btn pa-2"
+                @click="openFreeClass(data.item)"
+                >گرفتن کلاس از استاد</v-btn
               >
             </div>
           </template>
@@ -124,6 +132,7 @@
               outlined
               dense
           ></v-text-field>
+          <v-select v-model="newLesson.unit" outlined dense label="تعداد واحد" :items="newLesson"></v-select>
           <v-text-field
               label="توضیحات"
               v-model="newLesson.description"
@@ -154,7 +163,7 @@
               label="انتخاب عنوان درس" 
               v-model="newClass.title"
               :items="Lessons" 
-              item-text="show"
+              item-text="title"
               item-value="title"
               clearable
               outlined
@@ -246,33 +255,109 @@
 
         </v-card>
       </v-dialog>
-        <v-dialog width="400" v-model="editClassDialog">
+        <v-dialog width="500" v-model="editClassDialog">
         <v-card>
           <v-card-title>
           <h3>ویرایش کلاس</h3>
         </v-card-title>
         <v-card-text>
-          <v-text-field
-              label="عنوان درس"
-              v-model="selectedClass.title"
-              :disabled="isBusy"
-              outlined
-              dense
-          ></v-text-field>
-          <v-text-field
-              label="توضیحات"
-              v-model="selectedClass.description"
-              :disabled="isBusy"
-              outlined
-              dense
-          ></v-text-field>
-          <v-btn
-          class="secondary-btn"
-          :loading="isBusy"
-          :disabled="!selectedClass.title"
-          @click="editClass()"
-          >ویراریش</v-btn
-        >
+          <v-card-text>
+            <v-row>
+              <v-col cols="8">
+                <v-autocomplete 
+                label="انتخاب عنوان درس" 
+                v-model="selectedClass.title"
+                :items="Lessons" 
+                item-text="title"
+                item-value="title"
+                clearable
+                outlined
+                :disabled="isBusy" 
+                dense></v-autocomplete>
+              </v-col>
+              <v-col cols="2">
+                <v-btn variant="primary" outlined @click="openAddLesson">افزودن عنوان</v-btn>
+              </v-col>
+            </v-row>
+            <v-select v-model="selectedClass.day" outlined dense label="روز کلاس" :items="days"></v-select>
+            <v-row class="time-row">
+                <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+                  <span id="timeFrom">
+                    <v-text-field
+                      outlined
+                      dense
+                      append-icon="schedule"
+                      v-model="selectedClass.startTime"
+                      label="از ساعت"
+                      :editable="true"
+                      class="date-input"
+                    >
+                    </v-text-field>
+                  </span>
+  
+                  <date-picker
+                    v-model="selectedClass.startTime"
+                    element="timeFrom"
+                    color="#00a7b7"
+                    type="time"
+                  />
+                </v-col>
+                <v-col cols="6" sm="6" md="6" lg="6" xl="6">
+                  <span id="timeTo">
+                    <v-text-field
+                      outlined
+                      dense
+                      append-icon="schedule"
+                      v-model="selectedClass.endTime"
+                      label="تا ساعت"
+                      :editable="true"
+                      class="date-input"
+                    >
+                    </v-text-field>
+                  </span>
+  
+                  <date-picker
+                    v-model="selectedClass.endTime"
+                    element="timeTo"
+                    color="#00a7b7"
+                    type="time"
+                  />
+                </v-col>
+              </v-row>
+            <v-radio-group
+              v-model="selectedClass.gender"
+              row
+            >
+              <v-radio
+                label="مختلط"
+                value="all"
+              ></v-radio>
+              <v-radio
+                label="برادران"
+                value="boy"
+              ></v-radio>
+              <v-radio
+                label="خواهران"
+                value="girl"
+              ></v-radio>
+            </v-radio-group>
+  
+            <v-text-field
+                label="توضیحات"
+                v-model="selectedClass.description"
+                :disabled="isBusy"
+                outlined
+                dense
+            ></v-text-field>
+            <v-btn
+            class="secondary-btn"
+            :loading="isBusy"
+            :disabled="!selectedClass.title"
+            @click="editClass()"
+            >ویراریش</v-btn
+          >
+          </v-card-text>
+
         </v-card-text>
 
         </v-card>
@@ -294,6 +379,23 @@
 
         </v-card>
       </v-dialog>
+        <v-dialog width="400" v-model="freeClassDialog">
+          <v-card>
+            <v-card-title>
+            <h3>حذف استاد</h3>
+          </v-card-title>
+          <v-card-text>
+            <h5 class="text-right">آیا از گرفتن کلاس  {{ selectedClass.title }} از استاد اطمینان دارید؟</h5>
+            <v-btn
+            class="secondary-btn"
+            :loading="isBusy"
+            @click="freeClass()"
+            >حذف</v-btn
+          >
+          </v-card-text>
+
+          </v-card>
+      </v-dialog>
     </v-col>
   </div>
 </template>
@@ -307,15 +409,17 @@ export default {
   data() {
     return {
       newClass:{title:'',description:''},
-      newLesson:{title:'',description:''},
+      newLesson:{title:'',description:'',unit: 2},
       role: window.localStorage.role,
       selectedClass:{},
       newLessonDialog: false,
       newClassDialog: false,
       removeClassDialog: false,
       editClassDialog: false,
+      freeClassDialog: false,
       isBusy: false,
       search:'',
+      unitOptions:[1,2,3],
       Classes: [
         // {title:'ریاضی مهندسی',
         // startTime: '10:00',
@@ -378,6 +482,7 @@ export default {
       Fields: [
         { key: "index", label: "#" },
         { key: "title", label: "عنوان درس" },
+        { key: "unit", label: "تعداد واحد" },
         { key: "day", label: "روز" },
         { key: "startTime", label: "از شروع" },
         { key: "endTime", label: "تا پایان" },
@@ -389,6 +494,7 @@ export default {
       profFields: [
         { key: "index", label: "#" },
         { key: "title", label: "عنوان درس" },
+        { key: "unit", label: "تعداد واحد" },
         { key: "description", label: "توضیحات" },
         { key: "day", label: "روز" },
         { key: "startTime", label: "از شروع" },
@@ -398,6 +504,7 @@ export default {
       ],
       excelFields: [
         { field: "title", label: "عنوان درس" },
+        { field: "unit", label: "تعداد واحد" },
         { field: "day", label: "روز" },
         { field: "startTime", label: "از شروع" },
         { field: "endTime", label: "تا پایان" },
@@ -513,7 +620,7 @@ export default {
         });
     }, 
     openAddLesson(){
-      this.newLesson = {title:'',description:''}
+      this.newLesson = {title:'',description:'',unit: 2}
       this.newLessonDialog = true
     },
     addLesson(){
@@ -557,12 +664,16 @@ export default {
     }
       this.newClassDialog = true
     },
-    openDeleteClass(prof){
-      this.selectedClass = prof
+    openDeleteClass(clas){
+      this.selectedClass = clas
       this.removeClassDialog = true
     },
-    openEditClass(prof){
-      this.selectedClass = JSON.parse(JSON.stringify(prof))
+    openFreeClass(clas){
+      this.selectedClass = clas
+      this.freeClassDialog = true
+    },
+    openEditClass(clas){
+      this.selectedClass = JSON.parse(JSON.stringify(clas))
       this.editClassDialog = true
     },
     choose(item){
@@ -593,11 +704,13 @@ export default {
     },
     addClass(){
       this.isBusy = true;
+      let unit = this.Lessons.filter(lesson => lesson.title === this.newClass.title)[0].unit
       this.$http
         .post(
           this.baseUrl + "/api/v1/admin/class",
           {
-            ...this.newClass
+            ...this.newClass,
+            unit
           },
           {
             headers: {
@@ -622,11 +735,13 @@ export default {
     },
     editClass(){
       this.isBusy = true;
+      let unit = this.Lessons.filter(lesson => lesson.title === this.selectedClass.title)[0].unit
       this.$http
         .put(
           this.baseUrl + "/api/v1/admin/class/" + this.selectedClass._id,
           {
-            ...this.selectedClass
+            ...this.selectedClass,
+            unit
           },
           {
             headers: {
@@ -664,6 +779,35 @@ export default {
           if (res.data.response.status == 200) {
               this.removeClassDialog = false;
               this.toast("کلاس مورد نظر حذف شد", "success");
+              this.getClasses();
+          } else {
+            this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
+          }
+          this.isBusy = false;
+        })
+        .catch((err) => {
+          this.toast(err, "error");
+          this.isBusy = false;
+        });
+    },
+    freeClass(){
+      this.isBusy = true;
+      this.$http
+        .put(
+          this.baseUrl + "/api/v1/admin/class/unSubmit/Class",
+          {
+            classId: this.selectedClass._id
+          },
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (res.data.response.status == 200) {
+              this.freeClassDialog = false;
+              this.toast("کلاس با موفقیت آزاد شد", "success");
               this.getClasses();
           } else {
             this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");

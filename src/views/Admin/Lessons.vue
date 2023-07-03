@@ -74,6 +74,7 @@
               outlined
               dense
           ></v-text-field>
+          <v-select v-model="newLesson.unit" outlined dense label="تعداد واحد" :items="unitOptions"></v-select>
           <v-text-field
               label="توضیحات"
               v-model="newLesson.description"
@@ -84,7 +85,7 @@
           <v-btn
           class="secondary-btn"
           :loading="isBusy"
-          :disabled="!newLesson.title"
+          :disabled="!newLesson.title || !newLesson.unit"
           @click="addLesson()"
           >ثبت</v-btn
         >
@@ -105,6 +106,7 @@
               outlined
               dense
           ></v-text-field>
+          <v-select v-model="selectedLesson.unit" outlined dense label="تعداد واحد" :items="unitOptions"></v-select>
           <v-text-field
               label="توضیحات"
               v-model="selectedLesson.description"
@@ -148,7 +150,7 @@ export default {
 
   data() {
     return {
-      newLesson:{title:'',description:''},
+      newLesson:{title:'',description:'',unit:2},
       selectedLesson:{},
       newLessonDialog: false,
       removeLessonDialog: false,
@@ -159,8 +161,10 @@ export default {
       Fields: [
         { key: "index", label: "#" },
         { key: "title", label: "عنوان درس" },
+        { key: "unit", label: "تعداد واحد" },
         { key: "operation", label: "عملیات" },
       ],
+      unitOptions:[1,2,3],
     };
   },
   mounted(){
@@ -193,7 +197,7 @@ export default {
         });
     },
     openAddLesson(){
-      this.newLesson = {title:'',description:''}
+      this.newLesson = {title:'',description:'',unit:2}
       this.newLessonDialog = true
     },
     openDeleteLesson(prof){

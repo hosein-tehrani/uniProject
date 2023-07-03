@@ -3,85 +3,172 @@
     <v-col cols="12">
         <v-card class="br-card p-3">
           <v-row>
-      <v-col>
-        <v-btn
-          style="float: right"
-          class="secondary-btn mb-3 mt-2"
-          @click="openAddProf()"
-          >افزودن استاد</v-btn
-        >        
-        <v-btn
-          style="float: right"
-          class="secondary-btn mb-3 mt-2 mx-3"
-          @click="openAddAdmin()"
-          >افزودن مدیرگروه</v-btn
-        >
-      </v-col>
-      <v-col>
-        <h4 class="my-2 text-center">لیست اساتید</h4>
-      </v-col>
-      <v-col>
-        <v-btn
-          style="float: left"
-          class="secondary-btn mb-3 mt-2"
-          :disabled="profs.length==0"
-          @click="$refs.renderedExcel.$el.click()"
-          >دریافت اکسل</v-btn
-        >
-        <vue-excel-xlsx
-          v-show="false"
-          ref="renderedExcel"
-          :data="profs"
-          :columns="excelFields"
-          filename="لیست اساتید"
-          :sheetname="currentDate"
-        >
-          دریافت اکسل
-        </vue-excel-xlsx>
-      </v-col>
-    </v-row>
-
-          <b-table
-          bordered
-          :fields="Fields"
-          :items="profs"
-          small="small"
-          responsive
-        >
-          <template v-slot:head()="data">
-            <div style="text-align: center; vertical-align: middle">
-              {{ data.label }}
-            </div>
-          </template>
-          <template v-slot:cell(name)="data">
-            <div style="text-align: center; vertical-align: middle">
-              {{ data.value }}
-            </div>
-          </template>
-          <template v-slot:cell(operation)="data">
-            <div
-              style="text-align: center; vertical-align: middle"
-            >
-              <v-btn
-                class="ms-2 me-2 primary-btn pa-2"
-                @click="openDeleteProf(data.item)"
-                >حذف</v-btn
+            <v-col>
+            </v-col>
+            <v-col>
+              <h4 class="my-2 text-center">لیست اساتید و مدیر گروه‌ها</h4>
+            </v-col>
+            <v-col>
+            </v-col>
+          </v-row>
+          <v-tabs
+            fixed-tabs
+            v-model="tab"
+          >
+            <v-tabs-slider color="blue"></v-tabs-slider>
+            <v-tab block><h4>اساتید</h4></v-tab>
+            <v-tab @click="getAdmins"><h4>مدیرگروه‌ها</h4></v-tab>
+          </v-tabs>
+          <v-tabs-items v-model="tab">
+            <v-tab-item>
+              <v-card elevation="2" class="p-1">
+                <v-row>
+                  <v-col>
+                    <v-btn
+                      style="float: right"
+                      class="secondary-btn mb-3 mt-2"
+                      @click="openAddProf()"
+                      >افزودن استاد</v-btn
+                    >        
+                  </v-col>
+                  <v-col>
+                    <v-btn
+                      style="float: left"
+                      class="secondary-btn mb-3 mt-2"
+                      :disabled="profs.length==0"
+                      @click="$refs.renderedExcel.$el.click()"
+                      >دریافت اکسل</v-btn
+                    >
+                    <vue-excel-xlsx
+                      v-show="false"
+                      ref="renderedExcel"
+                      :data="profs"
+                      :columns="excelFields"
+                      filename="لیست اساتید"
+                      :sheetname="currentDate"
+                    >
+                      دریافت اکسل
+                    </vue-excel-xlsx>
+                  </v-col>
+                </v-row>
+                <b-table
+                bordered
+                :fields="Fields"
+                :items="profs"
+                small="small"
+                responsive
               >
-              <v-btn
-                class="ms-2 me-2 primary-btn pa-2"
-                @click="openEditProf(data.item)"
-                >ویرایش</v-btn
+                <template v-slot:head()="data">
+                  <div style="text-align: center; vertical-align: middle">
+                    {{ data.label }}
+                  </div>
+                </template>
+                <template v-slot:cell(name)="data">
+                  <div style="text-align: center; vertical-align: middle">
+                    {{ data.value }}
+                  </div>
+                </template>
+                <template v-slot:cell(operation)="data">
+                  <div
+                    style="text-align: center; vertical-align: middle"
+                  >
+                    <v-btn
+                      class="ms-2 me-2 primary-btn pa-2"
+                      @click="openDeleteProf(data.item)"
+                      >حذف</v-btn
+                    >
+                    <v-btn
+                      class="ms-2 me-2 primary-btn pa-2"
+                      @click="openEditProf(data.item)"
+                      >ویرایش</v-btn
+                    >
+                  </div>
+                </template>
+                <template v-slot:cell(index)="data">
+                  <div
+                    style="text-align: center; vertical-align: middle"
+                  >
+                    {{ data.index + 1 }}
+                  </div>
+                </template>
+                </b-table>
+              </v-card>
+            </v-tab-item>
+            <v-tab-item>
+              <v-card elevation="2" class="p-1">
+                <v-row>
+                  <v-col>
+                    <v-btn
+                      style="float: right"
+                      class="secondary-btn mb-3 mt-2 mx-3"
+                      @click="openAddAdmin()"
+                      >افزودن مدیرگروه</v-btn
+                    >
+                  </v-col>
+                  <v-col>
+                    <v-btn
+                      style="float: left"
+                      class="secondary-btn mb-3 mt-2"
+                      :disabled="admins.length==0"
+                      @click="$refs.adminRenderedExcel.$el.click()"
+                      >دریافت اکسل</v-btn
+                    >
+                    <vue-excel-xlsx
+                      v-show="false"
+                      ref="adminRenderedExcel"
+                      :data="admins"
+                      :columns="excelFields"
+                      filename="لیست مدیران گروه‌ها"
+                      :sheetname="currentDate"
+                    >
+                      دریافت اکسل
+                    </vue-excel-xlsx>
+                  </v-col>
+                </v-row>
+                <b-table
+                bordered
+                :fields="adminFields"
+                :items="admins"
+                small="small"
+                responsive
               >
-            </div>
-          </template>
-          <template v-slot:cell(index)="data">
-            <div
-              style="text-align: center; vertical-align: middle"
-            >
-              {{ data.index + 1 }}
-            </div>
-          </template>
-        </b-table>
+                <template v-slot:head()="data">
+                  <div style="text-align: center; vertical-align: middle">
+                    {{ data.label }}
+                  </div>
+                </template>
+                <template v-slot:cell(name)="data">
+                  <div style="text-align: center; vertical-align: middle">
+                    {{ data.value }}
+                  </div>
+                </template>
+                <template v-slot:cell(operation)="data">
+                  <div
+                    style="text-align: center; vertical-align: middle"
+                  >
+                    <v-btn
+                      class="ms-2 me-2 primary-btn pa-2"
+                      @click="openDeleteProf(data.item)"
+                      >حذف</v-btn
+                    >
+                    <v-btn
+                      class="ms-2 me-2 primary-btn pa-2"
+                      @click="openEditProf(data.item)"
+                      >ویرایش</v-btn
+                    >
+                  </div>
+                </template>
+                <template v-slot:cell(index)="data">
+                  <div
+                    style="text-align: center; vertical-align: middle"
+                  >
+                    {{ data.index + 1 }}
+                  </div>
+                </template>
+                </b-table>              
+              </v-card>
+            </v-tab-item>
+          </v-tabs-items>
         </v-card>
         <v-dialog width="400" v-model="newAdminDialog">
         <v-card>
@@ -260,12 +347,20 @@ export default {
       editProfDialog: false,
       isBusy: false,
       profs: [],
+      admins: [],
+      tab: 0,
       Fields: [
         { key: "index", label: "#" },
         { key: "name", label: "نام و نام خانوادگی" },
         { key: "mobile", label: "تلفن همراه" },
         { key: "email", label: "ایمیل" },
         { key: "operation", label: "عملیات" },
+      ],
+      adminFields: [
+        { key: "index", label: "#" },
+        { key: "name", label: "نام و نام خانوادگی" },
+        { key: "mobile", label: "تلفن همراه" },
+        { key: "email", label: "ایمیل" }
       ],
       excelFields: [
         { field: "name", label: "نام و نام خانوادگی" },
@@ -293,6 +388,32 @@ export default {
           if (res.status == 200) {
             if (res.data.response.status == 200) {
               this.profs = res.data.response.data
+            } else {
+              this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
+            }
+          } else {
+            this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
+          }
+        })
+        .catch((err) => {
+          this.toast(err, "error");
+        });
+    },
+    getAdmins(){
+      this.$http
+        .get(
+          this.baseUrl + "/api/v1/admin/admin",
+          {
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
+        )
+        .then((res) => {
+          if (res.status == 200) {
+            if (res.data.response.status == 200) {
+              this.admins = res.data.response.data
+              this.tab=1;
             } else {
               this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
             }
@@ -369,7 +490,7 @@ export default {
           if (res.status == 201) {
               this.newAdminDialog = false;
               this.toast("مدیرگروه با موفقیت اضافه شد", "success");
-              this.getProfs();
+              this.getAdmins();
           } else {
             this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
           }
