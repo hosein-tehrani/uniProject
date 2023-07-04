@@ -402,7 +402,7 @@ export default {
     getAdmins(){
       this.$http
         .get(
-          this.baseUrl + "/api/v1/admin/admin",
+          this.baseUrl + "/api/v1/admin/adminList",
           {
             headers: {
               Authorization: localStorage.getItem("token"),
@@ -410,13 +410,9 @@ export default {
           }
         )
         .then((res) => {
-          if (res.status == 200) {
-            if (res.data.response.status == 200) {
+          if (res.status == 201) {
               this.admins = res.data.response.data
               this.tab=1;
-            } else {
-              this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
-            }
           } else {
             this.toast("خطا: مشکلی پیش آمده. مجددا امتحان کنید.", "error");
           }

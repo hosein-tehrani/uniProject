@@ -132,7 +132,7 @@
               outlined
               dense
           ></v-text-field>
-          <v-select v-model="newLesson.unit" outlined dense label="تعداد واحد" :items="newLesson"></v-select>
+          <v-select v-model="newLesson.unit" outlined dense label="تعداد واحد" :items="unitOptions"></v-select>
           <v-text-field
               label="توضیحات"
               v-model="newLesson.description"
@@ -174,7 +174,23 @@
               <v-btn variant="primary" outlined @click="openAddLesson">افزودن عنوان</v-btn>
             </v-col>
           </v-row>
-          <v-select v-model="newClass.day" outlined dense label="روز کلاس" :items="days"></v-select>
+          <v-row>
+            <v-col>
+              <v-select v-model="newClass.day" outlined dense label="روز کلاس" :items="days"></v-select>
+            </v-col>
+            <v-col>
+              <v-text-field
+                    outlined
+                    dense
+                    type="number"
+                    v-model="newClass.capacity"
+                    label="ظرفیت"
+                    class="date-input"
+                  >
+              </v-text-field>
+            </v-col>
+          </v-row>
+          
           <v-row class="time-row">
               <v-col cols="6" sm="6" md="6" lg="6" xl="6">
                 <span id="timeFrom">
@@ -279,7 +295,22 @@
                 <v-btn variant="primary" outlined @click="openAddLesson">افزودن عنوان</v-btn>
               </v-col>
             </v-row>
-            <v-select v-model="selectedClass.day" outlined dense label="روز کلاس" :items="days"></v-select>
+            <v-row>
+            <v-col>
+              <v-select v-model="selectedClass.day" outlined dense label="روز کلاس" :items="days"></v-select>
+            </v-col>
+            <v-col>
+              <v-text-field
+                    outlined
+                    dense
+                    type="number"
+                    v-model="selectedClass.capacity"
+                    label="ظرفیت"
+                    class="date-input"
+                  >
+              </v-text-field>
+            </v-col>
+          </v-row>
             <v-row class="time-row">
                 <v-col cols="6" sm="6" md="6" lg="6" xl="6">
                   <span id="timeFrom">
@@ -420,70 +451,14 @@ export default {
       isBusy: false,
       search:'',
       unitOptions:[1,2,3],
-      Classes: [
-        // {title:'ریاضی مهندسی',
-        // startTime: '10:00',
-        // endTime: '12:15',
-        // day: 'سه شنبه',
-        // gender: 'مختلط',
-        // status: 'اخذ شده',
-        // teacher: 'رضا بشمنی'
-        // },
-        // {
-        // title:'ریاضی ۱',
-        // startTime: '10:00',
-        // endTime: '12:15',
-        // day: 'یک شنبه',
-        // gender: 'مختلط',
-        // status: 'اخذ شده',
-        // teacher: 'حمید دریلی'
-        // },
-        // {
-        // title:'فیزیک ۱',
-        // startTime: '8:00',
-        // endTime: '10:15',
-        // day: 'چهار شنبه',
-        // gender: 'مختلط',
-        // status: 'اخذ شده',
-        // teacher: 'رامین رستمی'
-        // },
-        // {
-        // title:'آز فیزیک',
-        // startTime: '8:00',
-        // endTime: '9:30',
-        // day: 'سه شنبه',
-        // gender: 'مختلط',
-        // status: 'اخذ نشده',
-        // teacher: '-'
-        // },
-        // {
-        // title:'ورزش ۱',
-        // description:' رشته کامپیوتر - روانشناسی - صنایع',
-        // startTime: '9:30',
-        // endTime: '11:00',
-        // day: 'دو شنبه',
-        // gender: 'برادران',
-        // status: 'اخذ شده',
-        // teacher: 'کامران مقدمی'
-        // },
-        // {
-        // title:'دانش خانواده',
-        // description:' رشته کامپیوتر - روانشناسی - صنایع',
-        // startTime: '9:00',
-        // endTime: '10:30',
-        // day: 'دو شنبه',
-        // gender: 'برادران',
-        // status: 'اخذ نشده',
-        // teacher: '-'
-        // }
-      ],
-      Lessons: [
-      ],
+      Classes: [],
+      Lessons: [],
       Fields: [
         { key: "index", label: "#" },
         { key: "title", label: "عنوان درس" },
         { key: "unit", label: "تعداد واحد" },
         { key: "day", label: "روز" },
+        { key: "capacity", label: "ظرفیت کلاس" },
         { key: "startTime", label: "از شروع" },
         { key: "endTime", label: "تا پایان" },
         { key: "gender", label: "جنسیت" },
@@ -497,6 +472,7 @@ export default {
         { key: "unit", label: "تعداد واحد" },
         { key: "description", label: "توضیحات" },
         { key: "day", label: "روز" },
+        { key: "capacity", label: "ظرفیت کلاس" },
         { key: "startTime", label: "از شروع" },
         { key: "endTime", label: "تا پایان" },
         { key: "gender", label: "جنسیت" },
@@ -506,6 +482,7 @@ export default {
         { field: "title", label: "عنوان درس" },
         { field: "unit", label: "تعداد واحد" },
         { field: "day", label: "روز" },
+        { field: "capacity", label: "ظرفیت کلاس" },
         { field: "startTime", label: "از شروع" },
         { field: "endTime", label: "تا پایان" },
         { field: "gender", label: "جنسیت" },
@@ -528,6 +505,7 @@ export default {
       ],
       timeFrom: "",
       timeTo: "",
+      unitOptions:[1,2,3],
       currentDate: moment(new Date()).format("jYYYY-jMM-jDD")
     };
   },
@@ -736,6 +714,7 @@ export default {
     editClass(){
       this.isBusy = true;
       let unit = this.Lessons.filter(lesson => lesson.title === this.selectedClass.title)[0].unit
+      delete this.selectedClass.registerDate
       this.$http
         .put(
           this.baseUrl + "/api/v1/admin/class/" + this.selectedClass._id,

@@ -77,25 +77,25 @@ export default {
       if (this.newPassword == this.repeatPassword) {
         //first check if our new pass was same as repeat password
         this.Busy = true;
-        let url = this.role === 'admin' ? '/api/v1/admin/editProfile' : '/api/v1/user/editProfile'
+        let url = this.role === 'admin' ? '/api/v1/admin/changePassword' : '/api/v1/user/changePassword'
         this.$http
           .put(
             this.baseUrl + url,
             {
               //then we send old pass and new pass to server address that we've set before
-              oldPass: md5(this.oldPassword),
-              password: md5(this.newPassword)
+              oldPass: this.oldPassword,
+              newPass: this.newPassword
             },
             {
-              headers: {
-                Authorization: "Bearer: " + localStorage.getItem("token")
-              }
-            }
+            headers: {
+              Authorization: localStorage.getItem("token"),
+            },
+          }
           )
           .then(res => {
             // if our respon was ok notify the success
             if (res.status == 200) {
-              this.toast(res.data, "success");
+              this.toast('رمز عبور شما با موفقیت ویرایش شد', "success");
               //then set old pass and new and reapet pass to empty in data
               this.oldPassword = "";
               this.newPassword = "";
@@ -107,7 +107,8 @@ export default {
             // busy avtive and disable the button
           })
           .catch(err => {
-            this.toast("خطا: " + err.response.data, "error");
+            console.log(err.response.data.response.message)
+            this.toast("خطا: " + err.response.data.response.message, "error");
             this.Busy = false;
           });
       } else {
