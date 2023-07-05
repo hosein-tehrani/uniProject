@@ -676,7 +676,8 @@ export default {
           this.isBusy = false;
         })
         .catch((err) => {
-          this.toast(err, "error");
+          let error = err.response.data.response.data
+          this.toast(error, "error");
           this.isBusy = false;
         });
     },

@@ -30,7 +30,7 @@ const state = {
         icon: "fa fa-home",
       },
       {
-        name: "اساتید",
+        name: "همکاران",
         route: "/admin/professors",
         icon: "fa fa-users",
       },
